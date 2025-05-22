@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import ChatButton from './components/ChatButton'
 import HomePage from './pages/HomePage'
 import PlansPage from './pages/PlansPage'
 import PackagesPage from './pages/PackagesPage'
@@ -12,6 +13,7 @@ import SigninPage from './pages/SigninPage'
 import PaymentPage from './pages/PaymentPage'
 import TemplatesPage from './pages/TemplatesPage'
 import ProfilePage from './pages/ProfilePage'
+import ChatPage from './pages/ChatPage'
 import TermsOfServicePage from './pages/TermsOfServicePage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import CookiePolicyPage from './pages/CookiePolicyPage'
@@ -37,12 +39,18 @@ function App() {
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/templates" element={<TemplatesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/chat" element={<ChatPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/cookie-policy" element={<CookiePolicyPage />} />
         </Routes>
       </main>
       <Footer />
+      {/* Chat button appears on all pages except the chat page itself */}
+      <Routes>
+        <Route path="/chat" element={null} />
+        <Route path="*" element={<ChatButton />} />
+      </Routes>
     </div>
   )
 }

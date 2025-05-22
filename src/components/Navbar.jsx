@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FiMenu, FiX, FiUser, FiHome, FiGrid, FiPackage, FiInfo, FiMoon, FiSun, FiLogOut, FiSettings } from 'react-icons/fi';
+import { FiMenu, FiX, FiUser, FiHome, FiGrid, FiPackage, FiInfo, FiMoon, FiSun, FiLogOut, FiSettings, FiCode } from 'react-icons/fi';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Navbar = () => {
@@ -116,6 +116,12 @@ const Navbar = () => {
             className={`text-sm font-medium ${isActive('/plans') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-700 dark:text-gray-300'}`}
           >
             Plans
+          </Link>
+          <Link 
+            to="/packages" 
+            className={`text-sm font-medium ${isActive('/packages') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-700 dark:text-gray-300'}`}
+          >
+            Packages
           </Link>
           <Link 
             to="/about" 
@@ -243,6 +249,14 @@ const Navbar = () => {
             >
               <FiPackage className="mr-3 w-5 h-5" />
               Plans
+            </Link>
+            <Link 
+              to="/packages" 
+              className={`flex items-center px-4 py-3 rounded-md ${isActive('/packages') ? 'bg-blue-50 text-blue-600 dark:bg-gray-800 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'}`}
+              onClick={closeMenu}
+            >
+              <FiCode className="mr-3 w-5 h-5" />
+              Packages
             </Link>
             <Link 
               to="/about" 

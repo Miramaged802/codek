@@ -29,9 +29,41 @@ const PaymentPage = () => {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   
   useEffect(() => {
+    // Handle data from template selection
     if (location.state?.template) {
       setTemplate(location.state.template);
-    } else {
+    } 
+    // Handle data from package form
+    else if (location.state?.packageData && location.state?.fromPackageForm) {
+      // Always create a package template object that prioritizes package info
+      const packageType = location.state.packageData.packageType;
+      const packagePrices = {
+        'basic': '$100',
+        'advanced': '$300',
+        'ultimate': '$1000'
+      };
+      
+      // Get image from selected template or use default
+      const templateImage = location.state.selectedTemplate ? 
+        location.state.selectedTemplate.image : 
+        'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg';
+      
+      // Create package template with selected template details if available
+      const packageTemplate = {
+        id: 'package-' + Date.now(),
+        title: packageType.charAt(0).toUpperCase() + packageType.slice(1) + ' Website Package',
+        category: 'package',
+        image: templateImage,
+        description: location.state.packageData.description || 'Custom website package',
+        price: packagePrices[packageType] || '$1000',
+        packageType: packageType,
+        templateName: location.state.selectedTemplate ? location.state.selectedTemplate.title : 'Custom Template'
+      };
+      
+      setTemplate(packageTemplate);
+    } 
+    // If no data, redirect to templates
+    else {
       navigate('/templates');
     }
   }, [location.state, navigate]);
@@ -565,7 +597,7 @@ const PaymentPage = () => {
             <div className="md:col-span-1">
               <div className="card sticky top-20">
                 <div className="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
-                  <h2 className="text-lg font-semibold mb-4">Template Summary</h2>
+                  <h2 className="text-lg font-semibold mb-4">{template.packageType ? 'Package Summary' : 'Template Summary'}</h2>
                   <div className="bg-white dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden mb-4">
                     <div className="relative">
                       <img 
@@ -580,11 +612,27 @@ const PaymentPage = () => {
                     <div className="p-4">
                       <h3 className="text-lg font-bold mb-2">{template.title}</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{template.description}</p>
-                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                        <span className="capitalize">{template.category}</span>
-                        <span className="mx-2">•</span>
-                        <span>{template.downloads} downloads</span>
-                      </div>
+                      
+                      {template.packageType ? (
+                        <div className="flex flex-col space-y-2">
+                          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <span className="font-medium">Package Type:</span>
+                            <span className="ml-2 capitalize">{template.packageType}</span>
+                          </div>
+                          {template.templateName && (
+                            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                              <span className="font-medium">Selected Template:</span>
+                              <span className="ml-2">{template.templateName}</span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                          <span className="capitalize">{template.category}</span>
+                          <span className="mx-2">•</span>
+                          <span>{template.downloads} downloads</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <h3 className="text-sm font-semibold mb-2">What's included:</h3>

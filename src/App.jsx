@@ -3,6 +3,8 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
 import PlansPage from './pages/PlansPage'
+import PackagesPage from './pages/PackagesPage'
+import PackageFormPage from './pages/PackageFormPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import SignupPage from './pages/SignupPage'
@@ -13,6 +15,7 @@ import ProfilePage from './pages/ProfilePage'
 import TermsOfServicePage from './pages/TermsOfServicePage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import CookiePolicyPage from './pages/CookiePolicyPage'
+
 import { useTheme } from './contexts/ThemeContext'
 
 function App() {
@@ -25,6 +28,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/plans" element={<PlansPage />} />
+          <Route path="/packages" element={<PackagesPage />} />
+          <Route path="/package-form" element={<PackageFormPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/signup" element={<SignupPage />} />

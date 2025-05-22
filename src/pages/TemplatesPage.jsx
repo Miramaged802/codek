@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate ,useLocation } from 'react-router-dom';
 import { FiSearch, FiFilter, FiGrid, FiList, FiHeart, FiShoppingCart } from 'react-icons/fi';
 
 const TemplatesPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [viewMode, setViewMode] = useState('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -218,6 +219,40 @@ const TemplatesPage = () => {
                           alert('Please sign in to purchase templates');
                           navigate('/signin');
                           return;
+                        }
+                        
+                        // For debugging - show an alert with location state
+                        console.log('Location state:', location.state);
+                        
+                        // Check if we came from package form for template selection
+                        if (location.state?.returnTo === '/package-form' && (location.state?.packageType === 'basic' || location.state?.packageType === 'advanced')) {
+                          const packageType = location.state.packageType;
+                          // Show confirmation of template selection
+                          alert(`Selected template: ${template.title}. Returning to ${packageType} form...`);
+                          
+                          // Store form data in local storage to preserve it
+                          const formData = JSON.parse(localStorage.getItem('packageFormData') || '{}');
+                          
+                          // Update form data with selected template
+                          formData.templateId = template.id;
+                          formData.packageType = packageType;
+                          formData.selectedTemplate = template; // Store the full template object
+                          
+                          // Save updated form data
+                          localStorage.setItem('packageFormData', JSON.stringify(formData));
+                          
+                          // Navigate back to package form with template ID
+                          navigate('/package-form', { 
+                            state: { 
+                              templateId: template.id,
+                              packageType: packageType,
+                              selectedTemplate: template
+                            } 
+                          });
+                          return;
+                        } else {
+                          // If not coming from package form, show normal flow
+                          console.log('Not coming from package form, proceeding to payment');
                         }
                         
                         // Navigate to payment page with template data

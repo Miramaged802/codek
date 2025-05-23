@@ -41,6 +41,36 @@ const SigninPage = () => {
     setLoginError('');
     setIsSubmitting(true);
     
+    // Check for admin credentials
+    const ADMIN_EMAIL = 'admin@codek.com';
+    const ADMIN_PASSWORD = 'admin123';
+    
+    if (formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASSWORD) {
+      // Store admin user in local storage
+      const adminUser = {
+        id: 'admin-1',
+        name: 'Admin',
+        email: ADMIN_EMAIL,
+        isLoggedIn: true,
+        isAdmin: true,
+        loginTime: new Date().toISOString()
+      };
+      
+      localStorage.setItem('currentUser', JSON.stringify(adminUser));
+      
+      // Simulate server delay
+      setTimeout(() => {
+        setIsSubmitting(false);
+        // Notify about authentication state change
+        window.dispatchEvent(new Event('auth-state-change'));
+        // Redirect to admin dashboard
+        navigate('/admin-dashboard');
+      }, 1500);
+      
+      return;
+    }
+    
+    // Regular user authentication
     // Get users from local storage
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     
@@ -70,6 +100,8 @@ const SigninPage = () => {
     // Simulate server delay
     setTimeout(() => {
       setIsSubmitting(false);
+      // Notify about authentication state change
+      window.dispatchEvent(new Event('auth-state-change'));
       // Redirect to home page
       navigate('/');
     }, 1500);
@@ -83,6 +115,11 @@ const SigninPage = () => {
     if (navbar) navbar.style.display = 'none';
     if (footer) footer.style.display = 'none';
     
+    // Trigger auth state change when user signs in
+    const refreshAuthState = () => {
+      window.dispatchEvent(new Event('auth-state-change'));
+    };
+    
     // Restore navbar and footer when component unmounts
     return () => {
       if (navbar) navbar.style.display = '';
@@ -91,9 +128,9 @@ const SigninPage = () => {
   }, []);
   
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-white dark:bg-dark-900">
       {/* Left side - Image */}
-      <div className="hidden md:flex md:w-1/2 bg-indigo-600 relative">
+      <div className="hidden md:flex md:w-1/2 bg-primary-600 relative">
         <img 
           src="img/signin.jpg" 
           alt="Team collaboration" 
@@ -102,11 +139,11 @@ const SigninPage = () => {
       </div>
       
       {/* Right side - Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-8">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-dark-900">
         <div className="max-w-md w-full">
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold mb-2">Sign In</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Sign In</h1>
+            <p className="text-gray-600 dark:text-gray-400">
               It is a long established fact that a reader will be distracted
             </p>
             {successMessage && (
@@ -124,7 +161,7 @@ const SigninPage = () => {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="form-label">Email</label>
+              <label htmlFor="email" className="form-label text-gray-700 dark:text-gray-300">Email</label>
               <input
                 id="email"
                 name="email"
@@ -132,13 +169,13 @@ const SigninPage = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="form-input"
+                className="form-input bg-white dark:bg-dark-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700"
                 placeholder="Enter your email"
               />
             </div>
             
             <div>
-              <label htmlFor="password" className="form-label">Password</label>
+              <label htmlFor="password" className="form-label text-gray-700 dark:text-gray-300">Password</label>
               <div className="relative">
                 <input
                   id="password"
@@ -147,7 +184,7 @@ const SigninPage = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="form-input pr-10"
+                  className="form-input pr-10 bg-white dark:bg-dark-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700"
                   placeholder="Enter your password"
                 />
                 <button
@@ -176,7 +213,7 @@ const SigninPage = () => {
           <div>
             <button
               type="submit"
-              className="w-full btn bg-primary-900 hover:bg-primary-800 text-white py-3 px-4 rounded-md font-medium transition duration-200"
+              className="w-full btn bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-md font-medium transition duration-200"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Signing in...' : 'Sign In'}

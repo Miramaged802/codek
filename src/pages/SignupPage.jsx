@@ -68,6 +68,8 @@ const SignupPage = () => {
     // Simulate server delay
     setTimeout(() => {
       setIsSubmitting(false);
+      // Notify that signup is complete
+      window.dispatchEvent(new Event('auth-state-change'));
       // Redirect to login page
       navigate('/signin', { state: { message: 'Registration successful! Please login.' } });
     }, 1500);
@@ -81,6 +83,11 @@ const SignupPage = () => {
     if (navbar) navbar.style.display = 'none';
     if (footer) footer.style.display = 'none';
     
+    // Refresh auth state when signup is completed
+    const refreshAuthState = () => {
+      window.dispatchEvent(new Event('auth-state-change'));
+    };
+    
     // Restore navbar and footer when component unmounts
     return () => {
       if (navbar) navbar.style.display = '';
@@ -89,9 +96,9 @@ const SignupPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-white dark:bg-dark-900">
       {/* Left side - Image */}
-      <div className="hidden md:flex md:w-1/2 bg-indigo-600 relative">
+      <div className="hidden md:flex md:w-1/2 bg-primary-600 relative">
         <img 
           src="img/signup.jpg" 
           alt="Coding workspace" 
@@ -100,11 +107,11 @@ const SignupPage = () => {
       </div>
       
       {/* Right side - Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-8">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-dark-900">
         <div className="max-w-md w-full">
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold mb-2">Sign Up</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Sign Up</h1>
+            <p className="text-gray-600 dark:text-gray-400">
               It is a long established fact that a reader will be distracted
             </p>
           </div>
@@ -112,7 +119,7 @@ const SignupPage = () => {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="form-label">Name</label>
+              <label htmlFor="name" className="form-label text-gray-700 dark:text-gray-300">Name</label>
               <input
                 id="name"
                 name="name"
@@ -120,13 +127,13 @@ const SignupPage = () => {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="form-input"
+                className="form-input bg-white dark:bg-dark-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700"
                 placeholder="Enter your name"
               />
             </div>
             
             <div>
-              <label htmlFor="email" className="form-label">Email</label>
+              <label htmlFor="email" className="form-label text-gray-700 dark:text-gray-300">Email</label>
               <input
                 id="email"
                 name="email"
@@ -134,7 +141,7 @@ const SignupPage = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className={`form-input ${emailError ? 'border-red-500' : ''}`}
+                className={`form-input bg-white dark:bg-dark-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 ${emailError ? 'border-red-500' : ''}`}
                 placeholder="Enter your email"
               />
               {emailError && (
@@ -143,7 +150,7 @@ const SignupPage = () => {
             </div>
             
             <div>
-              <label htmlFor="password" className="form-label">Password</label>
+              <label htmlFor="password" className="form-label text-gray-700 dark:text-gray-300">Password</label>
               <div className="relative">
                 <input
                   id="password"
@@ -152,7 +159,7 @@ const SignupPage = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="form-input pr-10"
+                  className="form-input pr-10 bg-white dark:bg-dark-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700"
                   placeholder="Enter your password"
                 />
                 <button
@@ -170,7 +177,7 @@ const SignupPage = () => {
             </div>
             
             <div>
-              <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+              <label htmlFor="confirmPassword" className="form-label text-gray-700 dark:text-gray-300">Confirm Password</label>
               <div className="relative">
                 <input
                   id="confirmPassword"
@@ -179,7 +186,7 @@ const SignupPage = () => {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`form-input pr-10 ${passwordError ? 'border-red-500' : ''}`}
+                  className={`form-input pr-10 bg-white dark:bg-dark-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 ${passwordError ? 'border-red-500' : ''}`}
                   placeholder="Confirm your password"
                 />
               </div>
@@ -192,7 +199,7 @@ const SignupPage = () => {
           <div>
             <button
               type="submit"
-              className="w-full btn bg-primary-900 hover:bg-primary-800 text-white py-3 px-4 rounded-md font-medium transition duration-200"
+              className="w-full btn bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-md font-medium transition duration-200"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Signing up...' : 'Sign Up'}
@@ -204,7 +211,7 @@ const SignupPage = () => {
               <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white dark:bg-dark-700 text-gray-500 dark:text-gray-400">Or sign up with</span>
+              <span className="px-2 bg-white dark:bg-dark-900 text-primary-600 dark:text-gray-400">Or sign up with</span>
             </div>
           </div>
           

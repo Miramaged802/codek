@@ -14,6 +14,7 @@ import PaymentPage from './pages/PaymentPage'
 import TemplatesPage from './pages/TemplatesPage'
 import ProfilePage from './pages/ProfilePage'
 import ChatPage from './pages/ChatPage'
+import AdminDashboardPage from './pages/AdminDashboardPage'
 import TermsOfServicePage from './pages/TermsOfServicePage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import CookiePolicyPage from './pages/CookiePolicyPage'
@@ -40,6 +41,7 @@ function App() {
           <Route path="/templates" element={<TemplatesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/cookie-policy" element={<CookiePolicyPage />} />

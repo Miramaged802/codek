@@ -13,27 +13,32 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   
   // Check if user is logged in
+  const checkUserLoggedIn = () => {
+    const userJson = localStorage.getItem('currentUser');
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      setCurrentUser(user);
+    } else {
+      setCurrentUser(null);
+    }
+  };
+
   useEffect(() => {
-    const checkUserLoggedIn = () => {
-      const userJson = localStorage.getItem('currentUser');
-      if (userJson) {
-        const user = JSON.parse(userJson);
-        setCurrentUser(user);
-      } else {
-        setCurrentUser(null);
-      }
-    };
-    
     // Check on initial load
     checkUserLoggedIn();
     
-    // Set up event listener for storage changes (in case user logs in/out in another tab)
+    // Set up event listeners for auth state changes
     window.addEventListener('storage', checkUserLoggedIn);
+    window.addEventListener('auth-state-change', checkUserLoggedIn);
     
+    // Force a check when route changes (helpful after signin/signup)
+    checkUserLoggedIn();
+
     return () => {
       window.removeEventListener('storage', checkUserLoggedIn);
+      window.removeEventListener('auth-state-change', checkUserLoggedIn);
     };
-  }, []);
+  }, [location.pathname]); // Re-check when route changes
   
   // Close sidebar and dropdown when clicking outside or pressing escape key
   useEffect(() => {

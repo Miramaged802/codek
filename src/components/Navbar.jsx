@@ -95,11 +95,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="py-4 border-b border-gray-200 dark:border-dark-400">
+    <nav className=" border-b border-gray-200 dark:border-dark-400">
       <div className="container px-4 sm:px-6 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-primary-600 dark:text-primary-400">
-          Codak
+        <Link to="/" className="flex items-center">
+          <img 
+            src="img/light.png" 
+            alt="Codek Logo" 
+           
+            style={{width: '150px' , height: '50px'}}
+          />
         </Link>
         
         {/* Desktop Navigation */}
